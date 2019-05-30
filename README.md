@@ -1,4 +1,4 @@
-# vulnPreview
+# GitHub Preview - GraphQL API v4 Repository Vulnerability Alerts
 
 ## Running this from locally installed Python
 
