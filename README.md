@@ -2,7 +2,7 @@
 
 ## Running this from locally installed Python
 
-```python
+```shell
 pip install -r requirements.txt
 python test-github.py --owner attesch --repository vulnPreview --token <putyourtokenherewhenrunning>
 ```
