@@ -37,7 +37,7 @@ query = """
 {
   repository (name: MYREPO, owner: MYORG) {
     name
-    vulnerabilityAlerts (first: 10) {
+    vulnerabilityAlerts (first: 50) {
       totalCount
       edges {
         node {
