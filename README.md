@@ -16,6 +16,13 @@ You must have Docker installed and running on your local machine
 docker run -it --rm -v $(pwd):/vulnPreview --workdir /vulnPreview python /bin/bash
 ```
 
+## Building and running your own docker image
+
+```shell
+docker build --tag vulnpreview:1.0 .
+docker run -it --rm vulnpreview:1.0 test-github.py --owner attesch --repository vulnPreview --token <putyourtokenherewhenrunning>
+```
+
 After the container starts follow the python code snippet above to run.
 
 ## Output
@@ -26,4 +33,3 @@ I ran this from a docker container against one of my personal repos that I forke
 root@d878cf63fb68:/gitgraph# python test-github.py --owner attesch --repository cezerin --token <REMOVED>
 {"data": {"repository": {"name": "cezerin", "vulnerabilityAlerts": {"totalCount": 3, "edges": [{"node": {"id": "MDI4OlJlcG9zaXRvcnlWdWxuZXJhYmlsaXR5QWxlcnQ5MTE4NTA1NA==", "packageName": "slug", "securityVulnerability": {"package": {"name": "slug"}, "firstPatchedVersion": null, "severity": "HIGH"}}}, {"node": {"id": "MDI4OlJlcG9zaXRvcnlWdWxuZXJhYmlsaXR5QWxlcnQ5MTE4NTA1NQ==", "packageName": "lodash", "securityVulnerability": {"package": {"name": "lodash"}, "firstPatchedVersion": {"identifier": "4.17.11"}, "severity": "LOW"}}}, {"node": {"id": "MDI4OlJlcG9zaXRvcnlWdWxuZXJhYmlsaXR5QWxlcnQ5MzAyNTQ2OA==", "packageName": "tar", "securityVulnerability": {"package": {"name": "tar"}, "firstPatchedVersion": {"identifier": "2.2.2"}, "severity": "HIGH"}}}]}}}}
 ```
-
