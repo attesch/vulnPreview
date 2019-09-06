@@ -8,6 +8,7 @@ parser = argparse.ArgumentParser(description="Beta GraphQL query for Github Vuln
 parser.add_argument('--owner', help='owner or organization name where repository is located')
 parser.add_argument('--repository', help='github repository to check for known vulnerabilities')
 parser.add_argument('--token', help='github token that can query repo')
+parser.add_argument('--result', help='produces [summary] or [raw] output')
 args = parser.parse_args()
 
 
@@ -68,25 +69,32 @@ vulncount = result["data"]["repository"]["vulnerabilityAlerts"]["totalCount"]
 #.data.repository.vulnerabilityAlerts.edges.node.securityVulnerability
 #out = result["data"]["repository"]["vulnerabilityAlerts"]["edges"]["node"]["securityVulnerability"]["severity"])
 
-low=0
-med=0
-high=0
-crit=0
-for edge in result["data"]["repository"]["vulnerabilityAlerts"]["edges"]:
-  sev = edge["node"]["securityVulnerability"]["severity"]
-  if sev == "LOW":
-    low=low+1
-  if sev == "MEDIUM":
-    med=med+1
-  if sev == "HIGH":
-    high=high+1
-  if sev == "CRITICAL":
-    crit=crit+1
+if args.result == "summary":
+  low=0
+  med=0
+  high=0
+  crit=0
+  for edge in result["data"]["repository"]["vulnerabilityAlerts"]["edges"]:
+    sev = edge["node"]["securityVulnerability"]["severity"]
+    if sev == "LOW":
+      low=low+1
+    if sev == "MEDIUM":
+      med=med+1
+    if sev == "HIGH":
+      high=high+1
+    if sev == "CRITICAL":
+      crit=crit+1
 
-#print("LOW={0} MED={1} HIGH={2} CRITICAL={3}".format(low, med, high, crit))
+  dict_result = {"Organization": args.owner, "Repository": args.repository, "Low": low, "Medium": med, "High": high,"Critical": crit}
+  print(dict_result)
+
+if args.result == "raw":
+  print("Total vulnerabilities Found : {0}".format(vulncount))
+  print(json.dumps(result)) 
+
 ## This output can be written to a file as a CSV. The file could be appended to and could include a date/time stamp for tracking vlaues over time.
-print("Organization,Repository,LOW,MED,HIGH,CRITICAL")
-print("{0},{1},{2},{3},{4},{5}".format(args.owner,args.repository,low, med, high, crit))
+#print("Organization,Repository,LOW,MED,HIGH,CRITICAL")
+#print("{0},{1},{2},{3},{4},{5}".format(args.owner,args.repository,low, med, high, crit))
 #print(json.dumps(out))
 #print(json.dumps(result))
 #print(json.dumps(result["data"]["repository"]["vulnerabilityAlerts"]["edges"]))
