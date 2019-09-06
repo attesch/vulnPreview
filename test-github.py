@@ -60,7 +60,35 @@ query = query.replace('MYREPO', args.repository )
 query = query.replace('MYORG', args.owner )
 
 result = run_query(query) # Execute the query
-print(json.dumps(result))
+vulncount = result["data"]["repository"]["vulnerabilityAlerts"]["totalCount"]
+print("\n")
+print("Total vulnerabilities Found : {0}".format(vulncount))
+print("\n")
+#print countmessage
+#.data.repository.vulnerabilityAlerts.edges.node.securityVulnerability
+#out = result["data"]["repository"]["vulnerabilityAlerts"]["edges"]["node"]["securityVulnerability"]["severity"])
+
+low=0
+med=0
+high=0
+crit=0
+for edge in result["data"]["repository"]["vulnerabilityAlerts"]["edges"]:
+  sev = edge["node"]["securityVulnerability"]["severity"]
+  if sev == "LOW":
+    low=low+1
+  if sev == "MEDIUM":
+    med=med+1
+  if sev == "HIGH":
+    high=high+1
+  if sev == "CRITICAL":
+    crit=crit+1
+
+#print("LOW={0} MED={1} HIGH={2} CRITICAL={3}".format(low, med, high, crit))
+print("Organization,Repository,LOW,MED,HIGH,CRITICAL")
+print("{0},{1},{2},{3},{4},{5}".format(args.owner,args.repository,low, med, high, crit))
+#print(json.dumps(out))
+#print(json.dumps(result))
+#print(json.dumps(result["data"]["repository"]["vulnerabilityAlerts"]["edges"]))
 #print result
 #remaining_rate_limit = result["data"]["rateLimit"]["remaining"] # Drill down the dictionary
 #print("Remaining rate limit - {}".format(remaining_rate_limit))
