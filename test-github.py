@@ -35,7 +35,7 @@ def run_query(query): # A simple function to use requests.post to make the API c
 # The GraphQL query (with a few aditional bits included) itself defined as a multi-line string.       
 query = """
 {
-  repository (name: "MYREPO", owner: MYORG) {
+  repository (name: "MYREPO", owner: "MYORG") {
     name
     vulnerabilityAlerts (first: 50) {
       totalCount
