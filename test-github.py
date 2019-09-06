@@ -8,9 +8,12 @@ parser = argparse.ArgumentParser(description="Beta GraphQL query for Github Vuln
 parser.add_argument('--owner', help='owner or organization name where repository is located')
 parser.add_argument('--repository', help='github repository to check for known vulnerabilities')
 parser.add_argument('--token', help='github token that can query repo')
-parser.add_argument('--result', help='produces [summary] or [raw] output')
+parser.add_argument('--result',default="summary", help='produces [summary] or [raw] output')
 args = parser.parse_args()
 
+
+print(args.repository)
+print(args.owner)
 
 #myAPIToken=args.token
 #githubv4 = 'https://api.github.com/graphql'
@@ -36,7 +39,7 @@ def run_query(query): # A simple function to use requests.post to make the API c
 # The GraphQL query (with a few aditional bits included) itself defined as a multi-line string.       
 query = """
 {
-  repository (name: MYREPO, owner: MYORG) {
+  repository (name: "MYREPO", owner: MYORG) {
     name
     vulnerabilityAlerts (first: 50) {
       totalCount
@@ -60,14 +63,11 @@ query = """
 query = query.replace('MYREPO', args.repository )
 query = query.replace('MYORG', args.owner )
 
+print(query)
+
 result = run_query(query) # Execute the query
-vulncount = result["data"]["repository"]["vulnerabilityAlerts"]["totalCount"]
-#print("\n")
-#print("Total vulnerabilities Found : {0}".format(vulncount))
-#print("\n")
-#print countmessage
-#.data.repository.vulnerabilityAlerts.edges.node.securityVulnerability
-#out = result["data"]["repository"]["vulnerabilityAlerts"]["edges"]["node"]["securityVulnerability"]["severity"])
+print(json.dumps(result)) 
+
 
 if args.result == "summary":
   low=0
@@ -89,6 +89,7 @@ if args.result == "summary":
   print(dict_result)
 
 if args.result == "raw":
+  vulncount = result["data"]["repository"]["vulnerabilityAlerts"]["totalCount"]
   print("Total vulnerabilities Found : {0}".format(vulncount))
   print(json.dumps(result)) 
 
