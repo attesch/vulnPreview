@@ -23,44 +23,20 @@ docker build --tag vulnpreview:1.0 .
 docker run -it --rm vulnpreview:1.0 test-github.py --owner attesch --repository vulnPreview --token <putyourtokenherewhenrunning>
 ```
 
-The current version of the script does not parse the results of the script.  The results are returned as json, and I use Windows Powershell to look at the results.
+## Summary Branch
 
-```powershell
-$results = docker run -it --rm vulnpreview:1.0 test-github.py --owner myorg --repository myrepository --token <putyourtokenherewhenrunning> | convertfrom-json
+The summary branch contains updates to the test-github.py script that outputs a header line and a values line that could be used in a CSV file.  The thought is that this data in whole or part could be put on a dashboard.
 
-$results.data.repository.vulnerabilityAlerts.edges.node.securityVulnerability
+```shell
+python test-github.py --owner attesch --repository cezerin --token <yourgittokenhere>
+Organization,Repository,LOW,MED,HIGH,CRITICAL
+attesch,cezerin,1,0,3,6
 
-severity firstPatchedVersion   package
--------- -------------------   -------
-HIGH                           @{name=slug}
-LOW      @{identifier=4.17.11} @{name=lodash}
-MODERATE @{identifier=1.0.12}  @{name=fstream}
-HIGH     @{identifier=3.13.1}  @{name=js-yaml}
-MODERATE @{identifier=3.13.0}  @{name=js-yaml}
-MODERATE @{identifier=2.3.1}   @{name=braces}
-MODERATE @{identifier=3.1.0}   @{name=esm}
-MODERATE @{identifier=4.0.0}   @{name=mem}
-CRITICAL @{identifier=4.6.2}   @{name=lodash.merge}
-CRITICAL @{identifier=4.17.14} @{name=lodash-es}
-CRITICAL @{identifier=4.6.2}   @{name=lodash.mergewith}
-CRITICAL @{identifier=4.5.0}   @{name=lodash.template}
-CRITICAL @{identifier=4.17.13} @{name=lodash}
-HIGH     @{identifier=4.0.14}  @{name=handlebars}
-MODERATE @{identifier=4.17.11} @{name=lodash}
-CRITICAL @{identifier=1.4.1}   @{name=eslint-utils}
-
-$results.data.repository.vulnerabilityAlerts.edges.node.securityVulnerability |Group-Object severity |select count,name
-
-Count Name
------ ----
-    3 HIGH
-    1 LOW
-    6 MODERATE
-    6 CRITICAL
+python test-github.py --owner attesch --repository cezerin --token <yourgittokenhere> > results.csv
 
 ```
 
-## Output
+## Output from Master Branch 
 
 I ran this from a docker container against one of my personal repos that I forked from Cezerin a NodeJs ecommerce app.
 
