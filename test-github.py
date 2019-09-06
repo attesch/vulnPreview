@@ -61,9 +61,9 @@ query = query.replace('MYORG', args.owner )
 
 result = run_query(query) # Execute the query
 vulncount = result["data"]["repository"]["vulnerabilityAlerts"]["totalCount"]
-print("\n")
-print("Total vulnerabilities Found : {0}".format(vulncount))
-print("\n")
+#print("\n")
+#print("Total vulnerabilities Found : {0}".format(vulncount))
+#print("\n")
 #print countmessage
 #.data.repository.vulnerabilityAlerts.edges.node.securityVulnerability
 #out = result["data"]["repository"]["vulnerabilityAlerts"]["edges"]["node"]["securityVulnerability"]["severity"])
@@ -84,6 +84,7 @@ for edge in result["data"]["repository"]["vulnerabilityAlerts"]["edges"]:
     crit=crit+1
 
 #print("LOW={0} MED={1} HIGH={2} CRITICAL={3}".format(low, med, high, crit))
+## This output can be written to a file as a CSV. The file could be appended to and could include a date/time stamp for tracking vlaues over time.
 print("Organization,Repository,LOW,MED,HIGH,CRITICAL")
 print("{0},{1},{2},{3},{4},{5}".format(args.owner,args.repository,low, med, high, crit))
 #print(json.dumps(out))
